@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        margin-right: 5px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #e0e0e0;
+    }
+
+    .table-nav {
+        margin-bottom: 20px;
+    }
+
+    .view-nav {
+        margin-top: 20px;
+    }
+</style>
+<body>
+    <h1>База данных Библиотека</h1>
+
+    <!-- Список таблиц -->
+    <div class="table-nav">
+        <h3>Таблицы:</h3>
+        {% for table in table_list %}
+            <a href="{{ url_for('table_view', table_name=table) }}">{{ table }}</a>
+            <br>
+            <br>
+        {% endfor %}
+    </div>
+
+    <!-- Список представлений (views) -->
+    <div class="view-nav">
+        <h3>Представления:</h3>
+        {% for view in view_list %}
+            <a href="{{ url_for('view_view', view_name=view) }}">{{ view }}</a>
+            <br>
+            <br>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

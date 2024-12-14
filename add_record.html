@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить запись в таблицу: {{ table_name }}</title>
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
+<body>
+    <h1>Добавить запись в таблицу {{ table_name }}</h1>
+
+    <!-- Выводим сообщения об ошибках или успешных действиях -->
+    {% with messages = get_flashed_messages(with_categories=true) %} <!-- Позволяет извлечь сообщения (через flash()) -->
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {% for column in columns %}
+            <label for="{{ column.replace(' ', '_') }}_input">{{ column }}</label>
+            {% if column == 'id' %}
+                <input
+                    type="text"
+                    id="{{ column.replace(' ', '_') }}_input"
+                    name="{{ column }}"
+                    value="{{ next_id }}"
+                    readonly>
+
+            {% elif column in fk_values %}
+                <select
+                    id="{{ column.replace(' ', '_') }}_select"
+                    name="{{ column }}"
+                    required>
+                    <option value="" disabled selected>Выберите значение</option>
+                    {% for value in fk_values[column] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input
+                    type="text"
+                    id="{{ column.replace(' ', '_') }}_text"
+                    name="{{ column }}"
+                    placeholder="Введите {{ column }}"
+                    value="{{ '1' if column == 'quantity' and table_name == 'books' else '' }}"
+                >
+            {% endif %}
+            <br>
+        {% endfor %}
+        <button type="submit">Добавить</button>
+    </form>
+    <button><a href="{{ url_for('table_view', table_name=table_name) }}">Вернуться к таблице</a></button>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты поиска</title>
+</head>
+<style>
+    .actions {
+        margin-top: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        margin-right: 5px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #e0e0e0;
+    }
+
+    .table-nav {
+        margin-bottom: 20px;
+    }
+
+    table {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+<body>
+    <h1>Результаты поиска в таблице {{ table_name }}</h1>
+    <p>Искали "{{ search_value }}" в столбце "{{ search_column }}"</p>
+
+    {% if search_results %}
+    <table border="1">
+        <thead>
+            <tr>
+                {% for column in columns %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in search_results %}
+            <tr>
+                {% for value in row %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Ничего не найдено.</p>
+    {% endif %}
+    <div class="actions">
+        <a href="{{ url_for('table_view', table_name=table_name) }}">Вернуться к таблице</a></button>
+    </div>
+</body>
+</html>

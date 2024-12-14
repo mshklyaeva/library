@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать запись {{ table_name }}</title>
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
+<body>
+    <h1>Редактировать запись в таблице {{ table_name }}</h1>
+
+    <!-- Выводим сообщения об ошибках или успешных действиях -->
+    {% with messages = get_flashed_messages(with_categories=true) %} <!-- Позволяет извлечь сообщения (через flash()) -->
+        {% if messages %} <!-- Если сообщение существует -->
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST"> <!-- данные, введенные пользователем, будут отправляться на сервер для обработки -->
+        {% for col, value in record %}
+            <label for="{{ col }}">{{ col }}:</label>
+            <input type="text" name="{{ col }}" id="{{ col }}" value="{{ value }}">
+            <br>
+        {% endfor %}
+        <button type="submit">Сохранить изменения</button>
+    </form>
+    <button><a href="{{ url_for('table_view', table_name=table_name) }}">Назад</a></button>
+</body>
+</html>

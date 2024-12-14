@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить читателя и займы</title>
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+    }
+</style>
+<body>
+    <h1>Добавить читателя и записи о займах</h1>
+    <form method="POST" action="{{ url_for('add_reader_with_loans') }}">
+        <fieldset>
+            <legend>Данные читателя</legend>
+            <label for="surname">Фамилия:</label>
+            <input type="text" name="surname" id="surname" required><br>
+
+            <label for="name">Имя:</label>
+            <input type="text" name="name" id="name" required><br>
+
+            <label for="patronymic">Отчество:</label>
+            <input type="text" name="patronymic" id="patronymic" required><br>
+
+            <label for="address">Адрес:</label>
+            <input type="text" name="address" id="address" required><br>
+
+            <label for="phone">Телефон:</label>
+            <input type="text" name="phone" id="phone" required><br>
+
+            <label for="age">Возраст:</label>
+            <input type="number" name="age" id="age" required><br>
+        </fieldset>
+        <fieldset>
+            <legend>Записи о займах</legend>
+            <div id="loans-container">
+                <div class="loan-record">
+                    <label for="book_id">Книга:</label>
+                    <select name="book_id[]" required>
+                        {% for book in fk_values.book_id %}
+                        <option value="{{ book }}">{{ book }}</option>
+                        {% endfor %}
+                    </select><br>
+
+                    <label for="library_id">Библиотека:</label>
+                    <select name="library_id[]" required>
+                        {% for library in fk_values.library_id %}
+                        <option value="{{ library }}">{{ library }}</option>
+                        {% endfor %}
+                    </select><br>
+
+                    <label for="employee_id">Сотрудник:</label>
+                    <select name="employee_id[]" required>
+                        {% for employee in fk_values.employee_id %}
+                        <option value="{{ employee }}">{{ employee }}</option>
+                        {% endfor %}
+                    </select><br>
+
+                    <label for="issue_date">Дата выдачи:</label>
+                    <input type="date" name="issue_date[]" required><br>
+
+                    <label for="return_date">Дата возврата:</label>
+                    <input type="date" name="return_date[]" required><br>
+                    <hr>
+                </div>
+            </div>
+            <button type="button" onclick="addLoanRecord()">Добавить ещё одну запись</button>
+        </fieldset>
+        <button type="submit">Сохранить</button>
+
+        <button type="button"><a href="{{ url_for('table_view', table_name='loans') }}">Вернуться к таблице</a></button>
+    </form>
+
+    <script>
+        function addLoanRecord() {
+            const container = document.getElementById('loans-container');
+            const loanRecord = document.querySelector('.loan-record').cloneNode(true);
+            container.appendChild(loanRecord);
+        }
+    </script>
+</body>
+</html>

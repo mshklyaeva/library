@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить Абонементы</title>
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+    }
+</style>
+<body>
+    <h1>Добавить Абонементы для Читателя</h1>
+
+    <form method="POST">
+        <div>
+            <label for="reader_id">Читатель:</label>
+            <select name="reader_id" id="reader_id" required>
+                <option value="" disabled selected>Выберите читателя</option>
+                {% for value in fk_values['reader_id'] %}
+                    <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <h2>Добавление записей (каждая книга - отдельная запись)</h2>
+
+        <!-- Повторяемые поля для каждой записи -->
+        <div id="loans-container">
+            <div class="loan-entry">
+                <label for="book_id[]">Книга:</label>
+                <select name="book_id[]" required>
+                    <option value="" disabled selected>Выберите книгу</option>
+                    {% for value in fk_values['book_id'] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="library_id[]">Библиотека:</label>
+                <select name="library_id[]" required>
+                    <option value="" disabled selected>Выберите библиотеку</option>
+                    {% for value in fk_values['library_id'] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="employee_id[]">Сотрудник:</label>
+                <select name="employee_id[]" required>
+                    <option value="" disabled selected>Выберите сотрудника</option>
+                    {% for value in fk_values['employee_id'] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="issue_date[]">Дата выдачи:</label>
+                <input type="date" name="issue_date[]" required>
+
+                <label for="return_date[]">Дата возврата:</label>
+                <input type="date" name="return_date[]" required>
+
+            </div>
+        </div>
+
+        <button type="button" onclick="addLoanEntry()">Добавить еще запись</button>
+        <button type="submit">Добавить абонементы</button>
+        <button type="button"><a href="{{ url_for('table_view', table_name=table_name) }}">Вернуться к таблице</a></button>
+
+    </form>
+
+    <script>
+        // Функция для добавления новых полей для каждой записи
+        function addLoanEntry() {
+            var container = document.getElementById("loans-container");
+            var newEntry = document.createElement("div");
+            newEntry.classList.add("loan-entry");
+
+            newEntry.innerHTML = `
+                <label for="book_id[]">Книга:</label>
+                <select name="book_id[]" required>
+                    <option value="" disabled selected>Выберите книгу</option>
+                    {% for value in fk_values['book_id'] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="library_id[]">Библиотека:</label>
+                <select name="library_id[]" required>
+                    <option value="" disabled selected>Выберите библиотеку</option>
+                    {% for value in fk_values['library_id'] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="employee_id[]">Сотрудник:</label>
+                <select name="employee_id[]" required>
+                    <option value="" disabled selected>Выберите сотрудника</option>
+                    {% for value in fk_values['employee_id'] %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="issue_date[]">Дата выдачи:</label>
+                <input type="date" name="issue_date[]" required>
+
+                <label for="return_date[]">Дата возврата:</label>
+                <input type="date" name="return_date[]" required>
+
+
+            `;
+
+            container.appendChild(newEntry);
+        }
+    </script>
+
+</body>
+</html>

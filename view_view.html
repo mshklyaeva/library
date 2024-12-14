@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Представление: {{ view_name }}</title>
+</head>
+<style>
+    .actions {
+        margin-top: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        margin-right: 5px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #e0e0e0;
+    }
+
+    .table-nav {
+        margin-bottom: 20px;
+    }
+
+    table {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+<body>
+    <!-- Список таблиц -->
+    <div class="table-nav">
+        {% for table in table_list %}
+            <a href="{{ url_for('table_view', table_name=table) }}">{{ table }}</a>
+        {% endfor %}
+        <br>
+        <br>
+        {% for view in view_list %}
+            <a href="{{ url_for('view_view', view_name=view) }}">{{ view }}</a>
+        {% endfor %}
+    </div>
+
+    <h1>Представление {{ view_name }}</h1>
+
+    <!-- Поиск -->
+        <form method="POST" action="{{ url_for('search_records', table_name=view_name) }}">
+            <label for="search_column">ПОИСК: выберите столбец:</label>
+            <select name="search_column" id="search_column" required>
+                {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="search_value">введите значение для поиска:</label>
+            <input type="text" id="search_value" name="search_value" placeholder="Введите значение" required>
+
+            <button type="submit">Найти</button>
+        </form>
+
+        <!-- Фильтрация -->
+        <form action="{{ url_for('table_view', table_name=view_name) }}" method="POST">
+            <label for="search_column">ФИЛЬТР: введите условие фильтрации:</label>
+            <input type="text" name="filter" placeholder="Фильтр по полям">
+            <button type="submit">Применить фильтр</button>
+        </form>
+
+        <!-- Сортировка -->
+        <form action="{{ url_for('table_view', table_name=view_name) }}" method="POST">
+            <label for="search_column">СОРТИРОВКА: выберите столбец:</label>
+            <select name="sort" id="column" required>
+                {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Сортировать</button>
+        </form>
+
+    <table>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for col in row %}
+                        <td>{{ col }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a href="/" class="button">Назад</a>
+    </div>
+</body>
+</html>
